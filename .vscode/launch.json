@@ -12,11 +12,9 @@
             "name": "Streamlit",
             "type": "debugpy",
             "request": "launch",
-            "program": "C://App/Anaconda/Lib/site-packages/streamlit/",
-            "args": [
-                "run",
-                "${file}"
-            ]
-        }      
+            "module": "streamlit",
+            "args": ["run", "${file}"],
+            "justMyCode": true,
+        }       
     ]
 }

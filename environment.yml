@@ -1,0 +1,21 @@
+name: cohere
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python
+  - pip
+  - pip:
+    - streamlit
+    - qdrant-client
+    - langchain
+    - langchain-community
+    - langchain-qdrant
+    - langchain-cohere
+    - pyowm
+    - tiktoken
+    - cohere
+    - beautifulsoup4
+    - wikipedia
+    - yfinance
+    - ipykernel

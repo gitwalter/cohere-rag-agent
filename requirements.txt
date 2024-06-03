@@ -10,3 +10,4 @@ cohere
 bs4
 wikipedia
 yfinance
+ipykernel
