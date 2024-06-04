@@ -3,21 +3,22 @@ from langchain.tools.base import StructuredTool
 from langchain_core.pydantic_v1 import BaseModel, Field
 from langchain_community.utilities.alpha_vantage import AlphaVantageAPIWrapper
 
-
-def search_symbols(query: str) -> str:
+def search_symbols(company_name: str) -> str:
     """Searches a stock market symbol or a company."""
     alpha_vantage = AlphaVantageAPIWrapper()
-    return alpha_vantage.search_symbols(query)
+    return alpha_vantage.search_symbols(company_name)
 
 def get_exchange_rate(from_currency: str, to_currency: str) -> str:
     """Gets the exchange rate for twu currencies."""
     alpha_vantage = AlphaVantageAPIWrapper()
     return alpha_vantage._get_exchange_rate(from_currency, to_currency)
 
+
 def get_time_series_daily(ticker_symbol: str) -> str:
     """"Gets the daily time series for a stock market ticker symbol"""
     alpha_vantage = AlphaVantageAPIWrapper()
     return alpha_vantage._get_time_series_daily(ticker_symbol)
+
 
 def get_time_series_weekly(ticker_symbol: str) -> str:
     """"Gets the weekly time series for a stock market ticker symbol"""
@@ -108,7 +109,6 @@ def get_top_gainers_losers_tool():
 def get_exchange_rate_tool():
     class ExchangeRateInputs(BaseModel):
         """Inputs to the get_exchange_rate tool."""
-
         from_currency: str = Field(
             description="currency to convert from"
         )
