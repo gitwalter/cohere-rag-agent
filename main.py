@@ -7,10 +7,9 @@ import qdrant_client
 from langchain.embeddings.cohere import CohereEmbeddings
 from langchain.vectorstores import Qdrant
 
-from langchain.chains import ConversationalRetrievalChain,LLMChain, RetrievalQA
+from langchain.chains import ConversationalRetrievalChain
 from langchain.embeddings.cohere import CohereEmbeddings
-from langchain_cohere import ChatCohere, create_cohere_react_agent
-from langchain.llms import Cohere
+from langchain_cohere import ChatCohere
 from langchain.prompts import PromptTemplate
 from langchain.chains.conversation.memory import ConversationSummaryMemory
 
@@ -26,21 +25,24 @@ st.write("This is a chatbot for a custom knowledge base")
 
 # Defining message class
 @dataclass
-class Message :
+class Message:
     """Class for keepiong track of chat Message."""
-    origin : Literal["Customer","elsa"]
-    Message : "str"
+
+    origin: Literal["Customer", "elsa"]
+    Message: "str"
 
 
 # laodinf styles.css
 def load_css():
-    with open("static/styles.css", "r")  as f:
+    with open("static/styles.css", "r") as f:
         css = f"<style>{f.read()} </style>"
         # st.write(css)
-        st.markdown(css, unsafe_allow_html = True)
+        st.markdown(css, unsafe_allow_html=True)
+
 
 # We are creating the embeddings in dbCheck file and we donot need to create it again
 # we only need to load it
+
 
 # loading Qdrant cloud
 def load_db():
@@ -51,15 +53,13 @@ def load_db():
     )
     embeddings = CohereEmbeddings(model="embed-english-v2.0")
     vector_store = Qdrant(
-        client = client,
-        collection_name = "rag_documents",
-        embeddings = embeddings
+        client=client, collection_name="rag_documents", embeddings=embeddings
     )
     print("connection established !")
     return vector_store
 
 
-def initialize_session_state() :
+def initialize_session_state():
     vector_store = load_db()
     # Initialize a session state to track whether the initial message has been sent
     if "initial_message_sent" not in st.session_state:
@@ -72,9 +72,9 @@ def initialize_session_state() :
     if "history" not in st.session_state:
         st.session_state.history = []
 
-    if "chain" not in st.session_state :  
+    if "chain" not in st.session_state:
 
-        #create custom prompt for your use case
+        # create custom prompt for your use case
         prompt_template = """
         You are a bot to answer questions from a document.
            
@@ -91,57 +91,60 @@ def initialize_session_state() :
             template=prompt_template, input_variables=["context", "question"]
         )
 
-        chain_type_kwargs = { "prompt" : PROMPT }
-        #build your LLM
+        chain_type_kwargs = {"prompt": PROMPT}
+        # build your LLM
         llm = ChatCohere()
-        #build your chain for RAG+C
-        template = (
-                """Combine the chat history and follow up question into 
+        # build your chain for RAG+C
+        template = """Combine the chat history and follow up question into 
                 a standalone question. 
                 If chat hsitory is empty, use the follow up question as it is.
                 Chat History: {chat_history}
                 Follow up question: {question}"""
-            )
         # TRY TO ADD THE INPUT VARIABLES
         prompt = PromptTemplate.from_template(template)
         # question_generator_chain = LLMChain(llm=llm, prompt=prompt)
         print("vector store loaded !")
-        st.session_state.chain = ConversationalRetrievalChain.from_llm(     
-            llm = llm,
-            chain_type = "stuff",
-            memory = ConversationSummaryMemory(llm = llm, memory_key='chat_history', input_key='question', output_key= 'answer', return_messages=True),
-            retriever = vector_store.as_retriever(search_type="mmr"),
-            condense_question_prompt = prompt,
+        st.session_state.chain = ConversationalRetrievalChain.from_llm(
+            llm=llm,
+            chain_type="stuff",
+            memory=ConversationSummaryMemory(
+                llm=llm,
+                memory_key="chat_history",
+                input_key="question",
+                output_key="answer",
+                return_messages=True,
+            ),
+            retriever=vector_store.as_retriever(search_type="mmr"),
+            condense_question_prompt=prompt,
             return_source_documents=False,
             combine_docs_chain_kwargs=chain_type_kwargs,
         )
 
-#Callblack function which when activated calls all the other
-#functions 
+
+# Callblack function which when activated calls all the other
+# functions
 def on_click_callback():
 
     load_css()
     customer_prompt = st.session_state.customer_prompt
 
     if customer_prompt:
-        
+
         st.session_state.input_value = ""
         st.session_state.initial_message_sent = True
 
-        with st.spinner('Generating response...'):
+        with st.spinner("Generating response..."):
 
             llm_response = st.session_state.chain(
-                {"context": st.session_state.chain.memory.buffer, "question": customer_prompt}, return_only_outputs=True)
-            
-         
+                {
+                    "context": st.session_state.chain.memory.buffer,
+                    "question": customer_prompt,
+                },
+                return_only_outputs=True,
+            )
 
-    st.session_state.history.append(
-        Message("customer", customer_prompt)
-    )
-    st.session_state.history.append(
-        Message("AI", llm_response)
-    )
-
+    st.session_state.history.append(Message("customer", customer_prompt))
+    st.session_state.history.append(Message("AI", llm_response))
 
 
 def main():
@@ -153,9 +156,9 @@ def main():
     with chat_placeholder:
         for chat in st.session_state.history:
             if type(chat.Message) is dict:
-                msg = chat.Message['answer']
+                msg = chat.Message["answer"]
             else:
-                msg = chat.Message 
+                msg = chat.Message
             div = f"""
             <div class = "chatRow 
             {'' if chat.origin == 'AI' else 'rowReverse'}">
@@ -166,7 +169,7 @@ def main():
 
     with st.form(key="chat_form"):
         cols = st.columns((6, 1))
-        
+
         # Display the initial message if it hasn't been sent yet
         if not st.session_state.initial_message_sent:
             cols[0].text_input(
@@ -174,7 +177,7 @@ def main():
                 placeholder="Hello, how can I assist you?",
                 label_visibility="collapsed",
                 key="customer_prompt",
-            )  
+            )
         else:
             cols[0].text_input(
                 "Chat",
@@ -189,13 +192,9 @@ def main():
             on_click=on_click_callback,
         )
 
-        
-
     # Update the session state variable when the input field changes
     st.session_state.input_value = cols[0].text_input
 
 
 if __name__ == "__main__":
     main()
-
-
