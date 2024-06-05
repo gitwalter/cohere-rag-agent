@@ -1,3 +1,25 @@
+"""
+This module provides the implementation of a Streamlit-based chatbot using a custom knowledge base and retrieval-augmented generation (RAG) with Cohere embeddings and Qdrant vector storage.
+
+Classes:
+    Message: A data class for keeping track of chat messages.
+
+Functions:
+    load_css() -> None:
+        Loads the CSS stylesheet for the Streamlit application.
+        
+    initialize_vector_store() -> Qdrant:
+        Initializes and returns the Qdrant vector store for embeddings.
+        
+    initialize_session_state() -> None:
+        Initializes the Streamlit session state variables.
+        
+    handle_chat_interaction() -> None:
+        Callback function that handles the chat interaction and updates the session state.
+        
+    main() -> None:
+        The main function that sets up the Streamlit interface and handles user interactions.
+"""
 import os
 import streamlit as st
 from typing import Literal
@@ -198,3 +220,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
