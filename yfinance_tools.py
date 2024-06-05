@@ -24,7 +24,9 @@ Functions:
 """
 
 import yfinance as yf
+from langchain_community.utilities.alpha_vantage import AlphaVantageAPIWrapper
 from langchain.tools import StructuredTool
+
 
 def get_ticker_info(ticker_symbol: str) -> str:
     """
@@ -50,7 +52,19 @@ def get_business_summary(ticker_symbol: str) -> str:
         str: A string containing the business summary of the stock.
     """
     ticker = yf.Ticker(ticker_symbol)
-    return ticker.info['longBusinessSummary']
+    try:
+        long_business_summary = ticker.info['longBusinessSummary']
+    except KeyError as e:
+        long_business_summary = 'Business summary could not be loaded'
+
+    return long_business_summary
+
+
+def av_search_symbols(company_name: str) -> str:
+    """Searches a stock market symbol or a company."""
+    alpha_vantage = AlphaVantageAPIWrapper()
+    return alpha_vantage.search_symbols(company_name)
+
 
 def get_ticker_history(ticker_symbol: str, period: str) -> str:
     """
