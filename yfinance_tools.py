@@ -14,8 +14,8 @@ def get_business_summary(ticker_symbol: str) -> str:
 def get_ticker_history(ticker_symbol: str, period: str) -> str:
     """Gets the information about a stock market ticker symbol history for a period"""
     ticker = yf.Ticker(ticker_symbol)
-    json = ticker.history(period=period).to_html()
-    return json
+    history = str(ticker.history(period=period))
+    return history
 
 
 def get_ticker_info_tool():
@@ -34,7 +34,7 @@ def get_business_summary_tool():
     description = (
         "Useful for when you need summary information about a company or a stock symbol. "
         "Useful if somebody asks 'I need a summary for companyXXX' "
-        "Useful if somebody asks 'Give me summary for companyXXX' "
+        "Useful if somebody asks 'Give me a summary for companyXXX' "
     )
 
     return StructuredTool.from_function(
