@@ -36,7 +36,7 @@ def get_top_gainers_losers() -> str:
     alpha_vantage = AlphaVantageAPIWrapper()
     return alpha_vantage._get_top_gainers_losers()
 
-def get_search_symbol_tool():
+def get_search_symbols_tool():
     description = (
         "Useful for when you need to search for a company or a stock symbol. "
         "Useful if somebody asks 'How is the stock market symbol for...' "    
