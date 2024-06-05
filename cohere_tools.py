@@ -4,8 +4,8 @@ from langchain_community.tools import WikipediaQueryRun
 from langchain_community.utilities import WikipediaAPIWrapper
 from langchain_community.tools.tavily_search import TavilySearchResults
 
-def get_openweathermap_tool(llm):
-    return load_tools(["openweathermap-api"], llm)[0]
+def get_openweathermap_tool():
+    return load_tools(["openweathermap-api"])[0]
 
 
 def get_internet_search_tool():
