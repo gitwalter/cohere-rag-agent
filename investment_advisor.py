@@ -108,7 +108,7 @@ def main():
                            - analysts
                            - web research
 
-                    Write everything in HTML markup for a good display in a chatbot.
+                    Write everything in good markup for a good display in a chatbot.
                    """
     
     prompt_template_summary = """ 1. Get a summary for {ticker}. If summary could not be loaded by  the summary tool,
@@ -131,7 +131,7 @@ def main():
     prompt_template_rating = """ 7. Based on all relevant information about fundamental, technical and sentiment data 
                                 determined in the steps before for {ticker}
                                 and the overall macroeconomic situation and sentiment at the stock market exchange
-                                produce now a profound and detailed investment and trading advice based on a factor analysis and your own ratings in your report.
+                                produce now a detailed profoundly elaborated investment and trading advice based on a factor analysis and your own ratings in your report.
                                 The rating should have an explicit header and explain why the stock is a buy or not.
                                 Make an educated advice for a trader about a reasonable profit-target above the stock price, a reasonable stop-loss under the stock price
                                 and a reasonable position size all in currency USD if the stock is a buy.                            
@@ -170,7 +170,7 @@ def main():
     # Execute analysis
     if st.button("Run Analysis"):
         response = invoke_cohere_with_tools(input=input, tools=combined_tools, prompt_template=prompt_template_combined)
-        st.write(response)
+        st.write(response['output'])
 
 if __name__ == "__main__":
     main()
