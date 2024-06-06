@@ -11,7 +11,7 @@ def get_openweathermap_tool():
 def get_internet_search_tool():
     internet_search = TavilySearchResults(max_results=4)
     internet_search.name = "internet_search"
-    internet_search.description = "Route a user query to the internet"
+    internet_search.description = "Route a user query to the internet, Useful when you need actual information"
     return internet_search
 
 

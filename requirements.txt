@@ -11,3 +11,5 @@ bs4
 wikipedia
 yfinance
 ipykernel
+finvizfinance
+faiss-cpu
