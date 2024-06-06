@@ -4,6 +4,7 @@ langchain
 langchain-community
 langchain-qdrant
 langchain-cohere
+langchain-experimental
 pyowm
 tiktoken
 cohere
