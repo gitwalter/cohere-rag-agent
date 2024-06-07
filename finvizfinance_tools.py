@@ -31,10 +31,3 @@ def get_fundamental_data_tool():
     return StructuredTool.from_function(
         func=get_fundamental_data, name="fv_get_fundamental_data", description=description
     )
-
-
-
-
-# fundamental_data = get_fundamental_data('MSFT')
-
-# print(fundamental_data)
