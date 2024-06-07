@@ -32,7 +32,7 @@ def get_yfinance_tools():
     return [get_business_summary_tool(), get_ticker_history_tool(), get_ticker_info_tool()]
 
 def invoke_cohere_with_tools(input, tools, prompt_template="{input}"):
-    llm = ChatCohere()
+    llm = Cohere()
     prompt = ChatPromptTemplate.from_template(prompt_template)
     agent = create_cohere_react_agent(llm, tools, prompt)
     agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=False)
